@@ -1,0 +1,1 @@
+dotnet publish ProcessAffinityControl.sln -a x64 -o ./dist
