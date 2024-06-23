@@ -1,14 +1,25 @@
+using System.Text;
+
 namespace ProcessAffinityControl;
 
 public static class LogExtensions
 {
-    public static void Log(this string message)
+    private static StreamWriter _streamWriter;
+    private static readonly string LOG_FILE_NAME = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs/log.txt");
+
+    static LogExtensions()
     {
-        Console.WriteLine(message);
+        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs"));
+
+        if (File.Exists(LOG_FILE_NAME))
+            File.Delete(LOG_FILE_NAME);
+
+        _streamWriter = new StreamWriter(LOG_FILE_NAME, true, Encoding.Default, 1024 * 4);
+        _streamWriter.AutoFlush = true;
     }
 
-    public static void Log(this string message, object arg0)
+    public static void Log(this string message, object? arg0 = null)
     {
-        Console.WriteLine(message, arg0);
+        _streamWriter.WriteLine(message, arg0);
     }
 }
